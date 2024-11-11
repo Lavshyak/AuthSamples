@@ -32,10 +32,15 @@ var accountAuthentication = builder.Services.AddAuthentication(options =>
 {
 });
 
-accountAuthentication.AddBearerToken(IdentityConstants.ApplicationScheme, options =>
+accountAuthentication.AddJwtBearer(IdentityConstants.ApplicationScheme, options =>
+{
+    
+});
+
+/*accountAuthentication.AddBearerToken(IdentityConstants.ApplicationScheme, options =>
 {
     //options.BearerTokenProtector = new BearerTokenNotProtector();
-});
+});*/
 
 /*builder.Services.AddAuthorization(options =>
 {
@@ -45,6 +50,8 @@ accountAuthentication.AddBearerToken(IdentityConstants.ApplicationScheme, option
 
     options.AddPolicy("AccountBearer", policy);#1#
 });*/
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 

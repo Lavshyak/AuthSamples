@@ -64,7 +64,6 @@ public class AuthController : ControllerBase
         {
             return this.BadRequest(checkPasswordSignInResult);
         }
-
         
         await _signInManager.SignInAsync(account, true);
 

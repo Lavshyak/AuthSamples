@@ -1,5 +1,5 @@
 ﻿services:
-  jwtsandbox_maindb:
+  jwtsample_maindb:
     image: postgres:16.2
     environment:
       POSTGRES_DB: "maindb"
@@ -23,14 +23,14 @@
     volumes:
       - coockiesample_maindb_storage:/var/lib/postgresql/data
 
-  jwtsandbox:
-    image: jwtsandbox
+  jwtsample:
+    image: jwtsample
     build:
       context: .
-      dockerfile: JWTSandbox/Dockerfile
+      dockerfile: JWTSample/Dockerfile
     environment:
       ConnectionStrings__maindb: '
-            Host=jwtsandbox_maindb;
+            Host=jwtsample_maindb;
             Port=5432;
             Database=maindb;
             Username=defaultUser;
@@ -40,7 +40,7 @@
     ports:
       - "8080:80"
     depends_on:
-      - jwtsandbox_maindb
+      - jwtsample_maindb
         
   coockiesample:
     image: coockiesample
