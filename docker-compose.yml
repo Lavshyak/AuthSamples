@@ -1,0 +1,67 @@
+﻿services:
+  jwtsandbox_maindb:
+    image: postgres:16.2
+    environment:
+      POSTGRES_DB: "maindb"
+      POSTGRES_USER: "defaultUser"
+      POSTGRES_PASSWORD: "qwe!@#$1234WERT"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    ports:
+      - "5433:5432"
+    volumes:
+      - jwtsandbox_maindb_storage:/var/lib/postgresql/data
+  
+  coockiesample_maindb:
+    image: postgres:16.2
+    environment:
+      POSTGRES_DB: "maindb"
+      POSTGRES_USER: "defaultUser"
+      POSTGRES_PASSWORD: "qwe!@#$1234WERT"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    ports:
+      - "5434:5432"
+    volumes:
+      - coockiesample_maindb_storage:/var/lib/postgresql/data
+
+  jwtsandbox:
+    image: jwtsandbox
+    build:
+      context: .
+      dockerfile: JWTSandbox/Dockerfile
+    environment:
+      ConnectionStrings__maindb: '
+            Host=jwtsandbox_maindb;
+            Port=5432;
+            Database=maindb;
+            Username=defaultUser;
+            Password=qwe!@#$1234WERT;
+            '
+      ASPNETCORE_URLS: "http://+:80"
+    ports:
+      - "8080:80"
+    depends_on:
+      - jwtsandbox_maindb
+        
+  coockiesample:
+    image: coockiesample
+    build:
+      context: .
+      dockerfile: CoockieSample/Dockerfile
+    environment:
+      ConnectionStrings__maindb: '
+            Host=coockiesample_maindb;
+            Port=5432;
+            Database=maindb;
+            Username=defaultUser;
+            Password=qwe!@#$1234WERT;
+            '
+      ASPNETCORE_URLS: "http://+:80"
+    ports:
+      - "8081:80"
+    depends_on:
+      - coockiesample_maindb
+    
+    
+volumes:
+  jwtsandbox_maindb_storage:
+  coockiesample_maindb_storage:
